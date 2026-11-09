@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analysis Result | Scorpio Analytica</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=style_v) }}">
+</head>
+<body class="page-shell">
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <nav class="topbar">
+    <a class="brand" href="/">
+      <img src="{{ url_for('static', filename='images/scorpio-logo.svg') }}" alt="Scorpio Analytica logo" class="brand-logo">
+      <h2>Scorpio Analytica</h2>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+      <span></span><span></span><span></span>
+    </button>
+    <div class="links" id="site-nav" data-nav-links>
+      <a href="/">Home</a>
+      {% if auth_user %}
+        <a href="/upload">Upload</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/reports" class="{% if request.path.startswith('/reports') %}active{% endif %}">Reports</a>
+        <a href="/sources">Sources</a>
+        <a href="/logout">Logout</a>
+      {% else %}
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="container result-shell">
+    <section class="header reveal">
+      <span class="kicker">Analysis Workspace</span>
+      <h1>Data Analysis Report</h1>
+      <p>Interactive report sections with a faster scan path.</p>
+      {% if report_name or report_created_at %}
+        <p class="muted report-meta">{{ report_name or 'Saved Report' }}{% if report_created_at %} • {{ report_created_at }}{% endif %}</p>
+      {% endif %}
+    </section>
+
+    <section class="cards reveal reveal-stagger-1">
+      <article class="stat-card"><h3>{{ kpis.rows }}</h3><p>Total Rows</p></article>
+      <article class="stat-card"><h3>{{ kpis.columns }}</h3><p>Total Columns</p></article>
+      <article class="stat-card"><h3>{{ kpis.numeric_cols }}</h3><p>Numeric Columns</p></article>
+      <article class="stat-card"><h3>{{ kpis.categorical_cols }}</h3><p>Categorical Columns</p></article>
+      <article class="stat-card"><h3>{{ kpis.duplicates_removed }}</h3><p>Duplicates Removed</p></article>
+      <article class="stat-card"><h3>{{ kpis.missing_after }}</h3><p>Missing After</p></article>
+    </section>
+
+    <section class="result-toolbar reveal reveal-stagger-2">
+      <div class="tab-row" data-tab-group>
+        <button class="tab-chip active" type="button" data-report-tab="overview">Overview</button>
+        <button class="tab-chip" type="button" data-report-tab="charts">Charts</button>
+        <button class="tab-chip" type="button" data-report-tab="quality">Quality</button>
+        <button class="tab-chip" type="button" data-report-tab="preview">Preview</button>
+      </div>
+      <div class="actions">
+        {% if auth_user and not shared_view %}
+          <a class="btn-link" href="/upload">Analyze Another</a>
+          <a class="btn-link secondary" href="/download/{{ cleaned_filename }}">Download Cleaned CSV</a>
+        {% endif %}
+        {% if share_url %}
+          <a class="btn-link secondary" href="{{ share_url }}" target="_blank" rel="noopener">Open Share Link</a>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="report-panel active" data-report-panel="overview">
+      <section class="section reveal">
+        <h2>Predictive Insight</h2>
+        {% if predictive_insight.available %}
+          <div class="insight-grid">
+            <article class="insight-card"><h4>Target Column</h4><p>{{ predictive_insight.target_column }}</p></article>
+            <article class="insight-card"><h4>Trend</h4><p>{{ predictive_insight.trend }}</p></article>
+            <article class="insight-card"><h4>Model Fit</h4><p>{{ predictive_insight.r2 }}</p></article>
+            <article class="insight-card"><h4>Projected Change</h4><p>{{ predictive_insight.projected_change_pct }}%</p></article>
+          </div>
+          <p class="muted model-note">Model equation: {{ predictive_insight.equation }}</p>
+          <div class="img-wrap"><img src="{{ predictive_insight.chart }}" alt="Predictive Trend Chart"></div>
+        {% else %}
+          <p class="muted">{{ predictive_insight.message }}</p>
+        {% endif %}
+      </section>
+
+      <section class="section reveal reveal-stagger-1">
+        <h2>Prescriptive Actions</h2>
+        <div class="recommendations">
+          {% for rec in prescriptive_insight.recommendations %}
+            <article class="recommendation-card">
+              <div class="recommendation-head">
+                <h4>{{ loop.index }}. {{ rec.action }}</h4>
+                <span class="priority-chip">Priority {{ rec.score }}</span>
+              </div>
+              <p><strong>Why:</strong> {{ rec.reason }}</p>
+              <p><strong>Impact:</strong> {{ rec.impact }}</p>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    </section>
+
+    <section class="report-panel" data-report-panel="charts">
+      <section class="section">
+        <h2>Visualization Output</h2>
+        {% if chart %}
+          <div class="img-wrap"><img src="{{ chart }}" alt="Dataset Visualization"></div>
+        {% else %}
+          <p class="muted">No numeric columns available for histogram generation.</p>
+        {% endif %}
+      </section>
+      <section class="section">
+        <h2>Correlation Module</h2>
+        {% if correlation_chart %}
+          <div class="img-wrap"><img src="{{ correlation_chart }}" alt="Correlation Heatmap"></div>
+        {% else %}
+          <p class="muted">At least two numeric columns are required for correlation heatmap.</p>
+        {% endif %}
+      </section>
+      {% if predictive_insight.available %}
+        <section class="section">
+          <h2>Forecasted Points</h2>
+          {{ predictive_insight.forecast_table | safe }}
+        </section>
+      {% endif %}
+    </section>
+
+    <section class="report-panel" data-report-panel="quality">
+      <section class="section">
+        <h2>Missing Values</h2>
+        {{ missing_table | safe }}
+      </section>
+      <section class="section">
+        <h2>Outlier Detection</h2>
+        {{ outlier_table | safe }}
+      </section>
+      <section class="section">
+        <h2>Statistical Summary</h2>
+        {{ tables | safe }}
+      </section>
+    </section>
+
+    <section class="report-panel" data-report-panel="preview">
+      <section class="section">
+        <h2>Cleaned Data Preview</h2>
+        {{ preview_table | safe }}
+      </section>
+      {% if auth_user and not shared_view and report_id %}
+        <div class="actions">
+          <a class="btn-link secondary" href="/reports/{{ report_id }}">Open Saved Report</a>
+        </div>
+      {% endif %}
+    </section>
+  </main>
+
+  <footer>© 2026 Scorpio Analytica | Interactive Data Intelligence Platform</footer>
+  <script src="{{ url_for('static', filename='main.js', v=main_v) }}" defer></script>
+</body>
+</html>

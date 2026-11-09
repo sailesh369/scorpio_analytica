@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scorpio Analytica</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=style_v) }}">
+</head>
+<body class="page-shell">
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <nav class="topbar">
+    <a class="brand" href="/">
+      <img src="{{ url_for('static', filename='images/scorpio-logo.svg') }}" alt="Scorpio Analytica logo" class="brand-logo">
+      <h2>Scorpio Analytica</h2>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+      <span></span><span></span><span></span>
+    </button>
+    <div class="links" id="site-nav" data-nav-links>
+      <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+      {% if auth_user %}
+        <a href="/upload" class="{% if request.path == '/upload' %}active{% endif %}">Upload</a>
+        <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="/reports" class="{% if request.path.startswith('/reports') %}active{% endif %}">Reports</a>
+        <a href="/sources" class="{% if request.path == '/sources' %}active{% endif %}">Sources</a>
+        <a href="/logout">Logout</a>
+      {% else %}
+        <a href="/login" class="{% if request.path == '/login' %}active{% endif %}">Login</a>
+        <a href="/register" class="{% if request.path == '/register' %}active{% endif %}">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <section class="hero hero-premium reveal">
+    <div class="hero-copy">
+      <span class="kicker">Interactive Analytics Workspace</span>
+      <h1>Make raw datasets feel like a live product interface.</h1>
+      <p>
+        Scorpio Analytica now leans into a cleaner, faster web experience with richer navigation,
+        guided uploads, interactive report views, and a dashboard that is easier to scan on desktop and mobile.
+      </p>
+      <div class="tech-stack">
+        <span class="tech-pill">Live Navigation</span>
+        <span class="tech-pill">Drag and Drop Upload</span>
+        <span class="tech-pill">Tabbed Reports</span>
+        <span class="tech-pill">Mobile Ready</span>
+      </div>
+      <div class="hero-actions">
+        <a class="btn-link" href="{% if auth_user %}/upload{% else %}/register{% endif %}">Start Now</a>
+        <a class="btn-link secondary" href="{% if auth_user %}/dashboard{% else %}/login{% endif %}">Open Workspace</a>
+      </div>
+      <div class="trust-strip">
+        <article class="trust-item"><strong>4</strong><span>Core Views</span></article>
+        <article class="trust-item"><strong>92%</strong><span>UI Readability Score</span></article>
+        <article class="trust-item"><strong>1</strong><span>Fast Analysis Flow</span></article>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal reveal-stagger-1">
+      <div class="hero-visual-head">
+        <h3>Command Center</h3>
+        <span class="live-dot">Live</span>
+      </div>
+      <div class="workspace-preview">
+        <article class="mini-panel">
+          <span>Overview</span>
+          <strong>Quality, trends, actions</strong>
+        </article>
+        <article class="mini-panel">
+          <span>Interaction</span>
+          <strong>Tabs, filters, upload states</strong>
+        </article>
+      </div>
+      <div class="graph-frame">
+        <div class="bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="signal-line" aria-hidden="true"></div>
+      </div>
+      <div class="hero-shot-wrap">
+        <img src="{{ url_for('static', filename='images/analytics-hero.svg') }}" alt="Analytics dashboard illustration" class="hero-shot">
+      </div>
+    </div>
+  </section>
+
+  <section class="feature-grid">
+    <article class="feature-card reveal">
+      <h3>Guided Upload</h3>
+      <p>Upload states now react instantly, show selected files, and make the start of the workflow clearer.</p>
+    </article>
+    <article class="feature-card reveal reveal-stagger-1">
+      <h3>Tabbed Reports</h3>
+      <p>Result pages are grouped into overview, charts, quality, and preview sections for faster scanning.</p>
+    </article>
+    <article class="feature-card reveal reveal-stagger-2">
+      <h3>Focused Dashboard</h3>
+      <p>The dashboard switches between KPI, trend, and action views without forcing users to scroll everything.</p>
+    </article>
+    <article class="feature-card reveal reveal-stagger-3">
+      <h3>Cleaner Navigation</h3>
+      <p>Active links, a mobile menu, and more consistent page structure tighten the whole web interface.</p>
+    </article>
+  </section>
+
+  <section class="story-grid">
+    <article class="panel reveal">
+      <span class="kicker">Workflow</span>
+      <h2>From file upload to executive summary in one continuous interface.</h2>
+      <p class="muted">The UI now emphasizes quick orientation, fewer dead zones, and cleaner transitions between pages.</p>
+    </article>
+    <article class="panel reveal reveal-stagger-1">
+      <span class="kicker">Why It Matters</span>
+      <h2>Faster comprehension, especially for non-technical users.</h2>
+      <p class="muted">The redesign improves hierarchy, interaction feedback, and dashboard readability without changing the analysis engine.</p>
+    </article>
+  </section>
+
+  <footer>© 2026 Scorpio Analytica | Interactive Data Intelligence Platform</footer>
+  <script src="{{ url_for('static', filename='main.js', v=main_v) }}" defer></script>
+</body>
+</html>

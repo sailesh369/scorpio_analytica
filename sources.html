@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Sources | Scorpio Analytica</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=style_v) }}">
+</head>
+<body class="page-shell">
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <nav>
+    <div class="brand"><img src="{{ url_for('static', filename='images/scorpio-logo.svg') }}" alt="Scorpio Analytica logo" class="brand-logo"><h2>Scorpio Analytica</h2></div>
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/upload">Upload</a>
+      <a href="/sources">Sources</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/reports">Reports</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="header reveal">
+      <h1>Data Source Hub</h1>
+      <p>Connect and manage intake channels for analytics workflows.</p>
+    </section>
+
+    <section class="home-grid">
+      <article class="feature-card reveal reveal-stagger-1">
+        <h3>CSV Upload</h3>
+        <p>Fully supported. Upload directly from the analysis page.</p>
+      </article>
+      <article class="feature-card reveal reveal-stagger-2">
+        <h3>Excel Upload (XLSX)</h3>
+        <p>Fully supported. Multi-sheet files use the first sheet by default.</p>
+      </article>
+      <article class="feature-card reveal reveal-stagger-3">
+        <h3>Google Sheets</h3>
+        <p>Planned. Add OAuth and sheet URL connector in the next phase.</p>
+      </article>
+      <article class="feature-card reveal reveal-stagger-4">
+        <h3>Database Connectors</h3>
+        <p>Planned. PostgreSQL/MySQL source setup with saved credentials.</p>
+      </article>
+    </section>
+
+    <section class="section reveal reveal-stagger-1">
+      <h2>Developer API</h2>
+      <p class="muted">Latest report endpoint for custom integrations:</p>
+      <pre class="api-box">GET /api/reports/latest</pre>
+    </section>
+
+    <div class="actions">
+      <a class="btn-link" href="/upload">Analyze New File</a>
+      <a class="btn-link secondary" href="/dashboard">Open Dashboard</a>
+    </div>
+  </main>
+
+  <footer>© 2026 Scorpio Analytica | Automated Data Intelligence Platform</footer>
+  <script src="{{ url_for('static', filename='main.js', v=main_v) }}" defer></script>
+</body>
+</html>

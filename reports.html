@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Reports | Scorpio Analytica</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=style_v) }}">
+</head>
+<body class="page-shell">
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <nav class="topbar">
+    <a class="brand" href="/">
+      <img src="{{ url_for('static', filename='images/scorpio-logo.svg') }}" alt="Scorpio Analytica logo" class="brand-logo">
+      <h2>Scorpio Analytica</h2>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+      <span></span><span></span><span></span>
+    </button>
+    <div class="links" id="site-nav" data-nav-links>
+      <a href="/">Home</a>
+      <a href="/upload">Upload</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/reports" class="active">Reports</a>
+      <a href="/sources">Sources</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="header reveal">
+      <span class="kicker">Report Library</span>
+      <h1>Saved Reports</h1>
+      <p>Filter past analyses and reopen them without scanning a long list manually.</p>
+    </section>
+
+    {% if reports %}
+      <section class="section reveal reveal-stagger-1">
+        <div class="section-head">
+          <h2>History</h2>
+          <input class="search-input" type="search" placeholder="Search reports..." data-report-search>
+        </div>
+        <div class="report-list">
+          {% for report in reports %}
+            <article class="report-row" data-report-name="{{ report.name | lower }}">
+              <div>
+                <h3>{{ report.name }}</h3>
+                <p class="muted">Created: {{ report.created_at }}</p>
+              </div>
+              <div class="report-actions">
+                <a class="btn-link secondary" href="/reports/{{ report.id }}">Open</a>
+                <a class="btn-link" href="/share/{{ report.share_token }}" target="_blank" rel="noopener">Share</a>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% else %}
+      <section class="section reveal reveal-stagger-1">
+        <h2>No reports saved yet</h2>
+        <p class="muted">Upload a dataset to generate and store your first report.</p>
+        <div class="actions"><a class="btn-link" href="/upload">Upload Dataset</a></div>
+      </section>
+    {% endif %}
+  </main>
+
+  <footer>© 2026 Scorpio Analytica | Interactive Data Intelligence Platform</footer>
+  <script src="{{ url_for('static', filename='main.js', v=main_v) }}" defer></script>
+</body>
+</html>

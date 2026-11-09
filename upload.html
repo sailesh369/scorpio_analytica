@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Dataset | Scorpio Analytica</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=style_v) }}">
+</head>
+<body class="page-shell">
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <nav class="topbar">
+    <a class="brand" href="/">
+      <img src="{{ url_for('static', filename='images/scorpio-logo.svg') }}" alt="Scorpio Analytica logo" class="brand-logo">
+      <h2>Scorpio Analytica</h2>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+      <span></span><span></span><span></span>
+    </button>
+    <div class="links" id="site-nav" data-nav-links>
+      <a href="/">Home</a>
+      <a href="/upload" class="active">Upload</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/reports">Reports</a>
+      <a href="/sources">Sources</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </nav>
+
+  <main class="layout-grid upload-layout">
+    <section class="panel reveal">
+      <span class="kicker">Step 1</span>
+      <h1>Upload a dataset with faster feedback.</h1>
+      <p>Drop a CSV or Excel file into the upload zone and move directly into analysis.</p>
+      <div class="steps">
+        <div class="step active-step">1. Upload</div>
+        <div class="step">2. Clean</div>
+        <div class="step">3. Review</div>
+      </div>
+      <div class="upload-aside-list">
+        <article><strong>Formats</strong><span>CSV, XLSX</span></article>
+        <article><strong>Behavior</strong><span>Missing values and duplicates cleaned automatically</span></article>
+        <article><strong>Output</strong><span>Dashboard, report, and cleaned download</span></article>
+      </div>
+    </section>
+
+    <section class="panel upload-card reveal reveal-stagger-1">
+      <div class="section-head">
+        <div>
+          <h2>Dataset Upload</h2>
+          <p class="muted">Choose a file or drag it into the drop zone.</p>
+        </div>
+        <span class="status-pill">Ready</span>
+      </div>
+      {% if error %}
+        <p class="error">{{ error }}</p>
+      {% endif %}
+      <form action="/upload" method="post" enctype="multipart/form-data" data-upload-form>
+        <label class="dropzone" for="dataset-file" data-dropzone>
+          <input id="dataset-file" type="file" name="file" accept=".csv,.xlsx" required data-file-input>
+          <span class="dropzone-icon">+</span>
+          <strong>Drop file here or click to browse</strong>
+          <p class="muted">Selected file: <span data-file-name>No file selected</span></p>
+        </label>
+        <button type="submit" class="btn" data-upload-submit>Analyze Dataset</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>© 2026 Scorpio Analytica | Interactive Data Intelligence Platform</footer>
+  <script src="{{ url_for('static', filename='main.js', v=main_v) }}" defer></script>
+</body>
+</html>
